@@ -31,5 +31,6 @@ class RatingDB(Base):
 
 #banco config:
 engine = create_engine('sqlite:///darkmoon_records.db', echo=False)
+Base.metadata.create_all(engine)
 
-sessionmaker = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine)

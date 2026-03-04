@@ -11,7 +11,8 @@ def to_menu():
     print('2. Listar todos os discos')
     print('3. Alterar status de estoque')
     print('4. Adicionar avaliação')
-    print('5. Sair')
+    print('5. Salvar dados no banco')
+    print('6. Sair')
     print()
 
 #cadastrando um novo disco no sistema
@@ -118,8 +119,22 @@ def add_avaliacao():
         except ValueError:
             print('❌ Digite um número válido!')
 
+def salvar_todos():
+    '''
+    salva os dados na base
+    '''
+    print('\n💾 SALVANDO NO BANCO DE DADOS...\n')
+    for album in Albums.album:
+        album.salvar_db()
+    print('\n✅ Todos os dados foram salvos!')
+
+
 #main
 def main():
+
+    print('Carregando dados...')
+    Albums.carregar_db
+
     while True:
         to_menu()
         opcao = input('Escolha uma opção: ')
@@ -136,11 +151,16 @@ def main():
         
         elif opcao == '4':
             add_avaliacao()
-        
+
         elif opcao == '5':
+            salvar_todos()
+        
+        elif opcao == '6':
+            salvar = input('\n Deseja salvar antes de sair? (s/n): ').lower()
+            if salvar == 's':
+                salvar_todos()
             print('\n👋 Obrigado por usar o Darkmoon Records!')
             break
-        
         else:
             print ('❌ Opção inválida, tente novamente.')
         input('\nPressione ENTER para continuar...')
