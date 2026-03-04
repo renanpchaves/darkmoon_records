@@ -20,3 +20,16 @@ class AlbumDB(Base):
 #tabela para ratings
 class RatingDB(Base):
     __tablename__ = 'ratings'
+
+    id = Column(Integer, primary_key=True)
+    cliente = Column(String, nullable=False)
+    nota = Column(Float, nullable=False)
+    album_id = Column(Integer, ForeignKey('albums.id'))
+    
+    #relacionamento:
+    album = relationship('AlbumDB', back_populates='avaliacoes')
+
+#banco config:
+engine = create_engine('sqlite:///darkmoon_records.db', echo=False)
+
+sessionmaker = sessionmaker(bind=engine)
