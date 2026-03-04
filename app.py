@@ -1,6 +1,9 @@
 from modelo.darkmoon import Albums
 
 cd1 = Albums('The Dark Side of the Moon', 'Pink Floyd', 10)
+cd1.receber_avaliacao('Rn', 10)
+cd1.receber_avaliacao('Jun', 8)
+cd1.receber_avaliacao('Mik', 2)
 cd1.estoque_alt()
 
 cd2 = Albums('Abbey Road', 'The Beatles', 17)
