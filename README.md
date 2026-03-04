@@ -4,11 +4,11 @@ Sistema criado em python para gerenciamento de um catálogo de álbuns, com cont
 
 Exercício prático, consolidando conhecimentos em:
 
-• Python orientado a objetos
-• Validação de inputs (CLI)
-• Persistência de dados
-• ORM (SCLAlchemy)
-• Table relationship
+- Python orientado a objetos
+- Validação de inputs (CLI)
+- Persistência de dados
+- ORM (SQLAlchemy)
+- Relacionamento entre tabelas
 
 ## ORM
 
