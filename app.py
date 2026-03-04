@@ -22,7 +22,7 @@ def cadastrar_discos():
     print('\n📀 CADASTRAR NOVO DISCO\n')
 
     nome = input('Nome do album: ')
-    artista = input('Nome do artista')
+    artista = input('Nome do artista: ')
     while True:
         try:
             quant_musicas = int(input('Quantidade de músicas: '))
@@ -44,7 +44,7 @@ def cadastrar_discos():
 
     if em_estoque == 's':
         novo_album.estoque_alt()
-        print(f'\n✅ Álbum "{nome}" cadastrado com sucesso!')
+    print(f'\n✅ Álbum "{nome}" cadastrado com sucesso!')
 
 def listar_discos():
     '''
@@ -64,7 +64,7 @@ def alterar_estoque():
         return
     print ('Álbuns cadastrados: ')
     for i, album in enumerate(Albums.album):
-        print (f'{i+1}. {album.nome} - {album.ativo}')
+        print (f'{i+1}. {album._nome} - {album.ativo}')
 
     while True:
         try:
@@ -83,26 +83,42 @@ def add_avaliacao():
     Adiciona avaliação a um album
     '''
     print('\n⭐ ADICIONAR AVALIAÇÃO\n')
+
+    #sem albuns registrados na base de dados
     if not Albums.album:
             print ('Não há nenhum album cadastrado...')
-    #mostrando tds os albums
+            return
+    
+    #mostrando todos os albums registrados
     print('Álbuns cadastrados:')
     for i, album in enumerate(Albums.album):
         print(f'{i+1}. {album._nome}')
 
-    #usuário escolhe o album:
+    #loop que recebe input do usuario para escolher o album que vai avaliar
+    while True:
+        try:
+            escolha = int(input('\nEscolha o número do álbum: ')) - 1
+            if 0 <= escolha < len(Albums.album):
+                break
+            else:
+                print('❌ Album inválido!')
+        except ValueError:
+            print('❌ Digite um número válido!')
     cliente = input ('Digite seu nome: ')
-
+            
+    #loop que recebe a avaliação de fato
     while True:
         try:
             nota = float(input('Nota (0 a 5): '))
             if Albums.album[escolha].receber_avaliacao(cliente, nota):
                 print('Avaliaçao registrada.')
+                break
             else:
                 print ('❌ Nota deve estar entre 0 e 5.')
         except ValueError:
             print('❌ Digite um número válido!')
 
+#main
 def main():
     while True:
         to_menu()
