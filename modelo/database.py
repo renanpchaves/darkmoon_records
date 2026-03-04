@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 #base para os modelos
 Base = declarative_base()
 
-#classe principal para o banco
+#tabela principal
 class AlbumDB(Base):
     __tablename__ = 'albums'
 
@@ -17,5 +17,6 @@ class AlbumDB(Base):
 
     avaliacoes = relationship('RatingDB', back_populates='album', cascade='all, delete-orphan')
 
+#tabela para ratings
 class RatingDB(Base):
     __tablename__ = 'ratings'
