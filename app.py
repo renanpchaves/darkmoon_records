@@ -34,10 +34,17 @@ def cadastrar_discos():
     novo_album = Albums(nome, artista, quant_musicas)
 
     #está em estoque?
-    em_estoque = input('Está em estoque? (s/n): ').lower()
+    while True:
+        em_estoque = input('Está em estoque? (s/n): ').lower()
+
+        if em_estoque in ['s', 'n']:
+            break
+        else:
+            print('❌ Digite apenas "s" ou "n".')
+
     if em_estoque == 's':
         novo_album.estoque_alt()
-    print(f'\n✅ Álbum "{nome}" cadastrado com sucesso!')
+        print(f'\n✅ Álbum "{nome}" cadastrado com sucesso!')
 
 def listar_discos():
     '''
@@ -103,7 +110,7 @@ def main():
         
         #menu principal do usuário
         if opcao == '1':
-            cadastrar_disco()
+            cadastrar_discos()
         
         elif opcao == '2':
             listar_discos()
@@ -112,7 +119,7 @@ def main():
             alterar_estoque()
         
         elif opcao == '4':
-            adicionar_avaliacao()
+            add_avaliacao()
         
         elif opcao == '5':
             print('\n👋 Obrigado por usar o Darkmoon Records!')
@@ -124,7 +131,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-cd1 = Albums('The Dark Side of the Moon', 'Pink Floyd', 10)
-cd2 = Albums('Abbey Road', 'The Beatles', 17)
-cd3 = Albums('Notes on a Conditional Form', 'The 1975', 22)
