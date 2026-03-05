@@ -48,34 +48,73 @@ class Albums:
     def salvar_db(self):
         '''
         salva o album no banco
+
+        CORREÇÃO:
+        - Se self._id for None -> cria (INSERT)
+        - Se self._id existir  -> atualiza (UPDATE)
         '''
         session = Session()
         try:
-            #objeto:
-            album_db = AlbumDB(
-                nome=self._nome,
-                artista=self._artista,
-                quant_musicas=self._quant_musicas,
-                ativo=self._ativo
-            )
-            #avaliaçoes:
-            for avaliacao in self._avaliacao:
-                rating_db = RatingDB(
-                    cliente=avaliacao._cliente,
-                    nota=avaliacao._nota
+            if self._id is None:
+                # INSERT
+                album_db = AlbumDB(
+                    nome=self._nome,
+                    artista=self._artista,
+                    quant_musicas=self._quant_musicas,
+                    ativo=self._ativo
                 )
-                album_db.avaliacoes.append(rating_db)
 
-            #Salvando aqui:
-            session.add(album_db)
-            session.commit()
+                # cria ratings no relacionamento
+                for avaliacao in self._avaliacao:
+                    album_db.avaliacoes.append(RatingDB(
+                        cliente=avaliacao._cliente,
+                        nota=avaliacao._nota
+                    ))
 
-            self._id = album_db.id
-            print (f'✅ Salvo na base de dados com o ID: {self._id}')
-        
+                session.add(album_db)
+                session.commit()
+
+                self._id = album_db.id
+                print(f'✅ Salvo na base de dados com o ID: {self._id}')
+
+            else:
+                # UPDATE
+                album_db = session.get(AlbumDB, self._id)
+                if not album_db:
+                    print('❌ Álbum não encontrado no banco para atualizar.')
+                    return
+
+                #checando mudanças simples nos campos do album
+                album_atualizou = (
+                album_db.nome != self._nome or
+                album_db.artista != self._artista or 
+                album_db.quant_musicas != self._quant_musicas or
+                album_db.ativo != self._ativo
+                )
+
+                #checando mudanças nas avaliaçoes (comparando listas)
+                ratings_db = [(r.cliente, float(r.nota)) for r in album_db.avaliacoes]
+                ratings_mem = [(r._cliente, float(r._nota)) for r in self._avaliacao]
+                ratings_atualizou = ratings_db != ratings_mem
+
+                if not album_atualizou and not ratings_atualizou:
+                    print(f'ℹ️ Álbum (ID {self._id}) sem alterações. Nada para salvar.')
+                    return
+
+                #aplicando as mudanças
+                album_db.avaliacoes.clear()
+                for avaliacao in self._avaliacao:
+                    album_db.avaliacoes.append(RatingDB(
+                        cliente=avaliacao._cliente,
+                        nota=avaliacao._nota
+                    ))
+
+                session.commit()
+                print(f'✅ Álbum (ID {self._id}) atualizado no banco.')
+
         except Exception as e:
             session.rollback()
-            print (f'❌ Erro ao salvar: {e}')
+            print(f'❌ Erro ao salvar: {e}')
         finally:
             session.close()
 

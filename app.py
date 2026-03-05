@@ -133,7 +133,7 @@ def salvar_todos():
 def main():
 
     print('Carregando dados...')
-    Albums.carregar_db
+    Albums.carregar_db()
 
     while True:
         to_menu()
