@@ -10,9 +10,10 @@ def to_menu():
     print('\n1. Cadastrar novo disco')
     print('2. Listar todos os discos')
     print('3. Alterar status de estoque')
-    print('4. Adicionar avaliação')
-    print('5. Salvar dados no banco')
-    print('6. Sair')
+    print('4. Deletar álbums da base de dados')
+    print('5. Adicionar avaliação')
+    print('6. Salvar dados no banco')
+    print('7. Sair')
     print()
 
 #cadastrando um novo disco no sistema
@@ -53,6 +54,48 @@ def listar_discos():
     '''
     print('\n📚 CATÁLOGO COMPLETO\n')
     Albums.listar_albums()
+
+def deletar_discos():
+    '''
+    Exclui um album do sistema por ID
+    '''
+    print('\n🗑️ DELETAR DISCO\n')
+
+    if not Albums.album:
+        print('❌ Não há nenhum álbum cadastrado...')
+        return
+    
+    #iterando para mostrar todos os albums cadastrados
+    print('Álbuns cadastrados:')
+    for i, album in enumerate(Albums.album):
+        print(f'{i+1}. {album._nome} - {album._artista}')
+
+    #escolher o album
+    while True:
+        try:
+            escolha = int(input('\número do álbum a deletar: (digite 0 para cancelar)'))
+
+            if escolha == 0:
+                print('❌ Operação cancelada.')
+                return
+            
+            escolha -= 1 #ajustando o valor pra relacionar ao indice
+
+            if 0 <= escolha < len(Albums.album):
+                album = Albums.album[escolha]
+
+                confirma = input(f'\n⚠️ Tem certeza que deseja deletar "{album._nome}"? (s/n): ').lower()
+
+                if confirma == 's':
+                    album.deletar_album()
+                    print(f'\n✅ Álbum "{album._nome}" deletado com sucesso!')
+                else:
+                    print('❌ Operação cancelada.')
+                break
+            else:
+                print('❌Número inválido!')
+        except ValueError:
+            print('❌ Digite um número válido!')
 
 def alterar_estoque():
     '''
@@ -148,14 +191,17 @@ def main():
         
         elif opcao == '3':
             alterar_estoque()
-        
+
         elif opcao == '4':
+            deletar_discos()
+        
+        elif opcao == '5':
             add_avaliacao()
 
-        elif opcao == '5':
+        elif opcao == '6':
             salvar_todos()
         
-        elif opcao == '6':
+        elif opcao == '7':
             salvar = input('\n Deseja salvar antes de sair? (s/n): ').lower()
             if salvar == 's':
                 salvar_todos()

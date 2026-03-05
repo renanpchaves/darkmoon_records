@@ -45,6 +45,31 @@ class Albums:
         media = round(soma_notas / quantidade_notas, 1)
         return f'⭐ {media}'
     
+    def deletar_album(self):
+        '''
+        Remove o album do banco de dados
+        '''
+        try:
+            if self in Albums.album:
+                Albums.album.remove(self)
+            #remove do banco via ID
+            if self._id:
+                session = Session()
+                try:
+                    album_db = session.query(AlbumDB).filter_by(id=self._id).first()
+                    if album_db:
+                        session.delete(album_db)
+                        session.commit()
+                except Exception as e:
+                    session.rollback()
+                    print(f'❌ Erro ao deletar do banco: {e}')
+                finally:
+                    session.close()
+            return True
+        except Exception as e:
+            print(f'❌ Erro ao deletar do banco: {e}')
+            return False
+
     def salvar_db(self):
         '''
         salva o album no banco
